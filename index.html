@@ -1,890 +1,819 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glow & Grace — Beauty Blog</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --pink-light: #fff0f3;
-            --pink: #f8c8d4;
-            --pink-mid: #e8a0b4;
-            --pink-dark: #c27088;
-            --gold: #c9a96e;
-            --gold-light: #e6d5a8;
-            --gold-dark: #a8863e;
-            --text: #3d2c2e;
-            --text-light: #6b5456;
-            --white: #ffffff;
-            --bg: #fffaf8;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Lato', sans-serif;
-            color: var(--text);
-            background: var(--bg);
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
-
-        a { text-decoration: none; color: inherit; transition: color 0.3s; }
-
-        img { max-width: 100%; display: block; }
-
-        .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
-
-        /* ─── NAVBAR ─── */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(255,250,248,0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(200,169,110,0.15);
-            transition: box-shadow 0.3s;
-        }
-        nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-        nav .container {
-            display: flex; align-items: center; justify-content: space-between;
-            height: 72px;
-        }
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem; font-weight: 700; color: var(--pink-dark);
-            letter-spacing: 0.5px;
-        }
-        .logo span { color: var(--gold); }
-        .nav-links { display: flex; gap: 32px; list-style: none; }
-        .nav-links a {
-            font-size: 0.9rem; font-weight: 700; letter-spacing: 1.2px;
-            text-transform: uppercase; color: var(--text-light);
-            position: relative; padding-bottom: 4px;
-        }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: 0; left: 0;
-            width: 0; height: 2px; background: var(--gold);
-            transition: width 0.3s;
-        }
-        .nav-links a:hover { color: var(--gold-dark); }
-        .nav-links a:hover::after { width: 100%; }
-
-        .hamburger {
-            display: none; flex-direction: column; gap: 5px;
-            cursor: pointer; background: none; border: none; padding: 4px;
-        }
-        .hamburger span {
-            width: 26px; height: 2px; background: var(--text);
-            transition: 0.3s; border-radius: 2px;
-        }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-
-        /* ─── HERO ─── */
-        .hero {
-            min-height: 100vh; display: flex; align-items: center;
-            background: linear-gradient(135deg, var(--pink-light) 0%, #fff5f0 50%, #fdf6ee 100%);
-            position: relative; overflow: hidden;
-        }
-        .hero::before {
-            content: ''; position: absolute; top: -120px; right: -120px;
-            width: 500px; height: 500px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(200,169,110,0.12), transparent 70%);
-        }
-        .hero::after {
-            content: ''; position: absolute; bottom: -80px; left: -80px;
-            width: 350px; height: 350px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(248,200,212,0.25), transparent 70%);
-        }
-        .hero .container {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 60px; align-items: center; position: relative; z-index: 1;
-        }
-        .hero-text h1 {
-            font-size: 3.4rem; line-height: 1.2; margin-bottom: 20px;
-            color: var(--text);
-        }
-        .hero-text h1 em { color: var(--pink-dark); font-style: italic; }
-        .hero-text p {
-            font-size: 1.12rem; color: var(--text-light);
-            max-width: 440px; margin-bottom: 32px; line-height: 1.8;
-        }
-        .btn {
-            display: inline-block; padding: 14px 36px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--white); font-weight: 700; font-size: 0.85rem;
-            letter-spacing: 1.5px; text-transform: uppercase;
-            border-radius: 50px; border: none; cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(200,169,110,0.35);
-        }
-        .btn-outline {
-            background: transparent; border: 2px solid var(--gold);
-            color: var(--gold-dark);
-        }
-        .btn-outline:hover {
-            background: var(--gold); color: var(--white);
-        }
-        .hero-visual {
-            display: flex; justify-content: center; align-items: center;
-            position: relative;
-        } 
-        .hero-image-wrapper {
-            width: 420px; height: 480px; border-radius: 200px 200px 160px 160px;
-            overflow: hidden; position: relative;
-            box-shadow: 0 30px 60px rgba(194,112,136,0.15);
-            background: linear-gradient(135deg, var(--pink), var(--gold-light));
-            display: flex; align-items: center; justify-content: center;
-        }
-        .hero-image-wrapper svg { width: 260px; height: 260px; opacity: 0.6; }
-        .hero-float {
-            position: absolute; background: var(--white);
-            border-radius: 16px; padding: 14px 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            display: flex; align-items: center; gap: 10px;
-            font-size: 0.85rem; font-weight: 700;
-        }
-        .hero-float.top-right { top: 20px; right: -20px; }
-        .hero-float.bottom-left { bottom: 40px; left: -30px; }
-        .hero-float .icon {
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-        }
-        .hero-float .icon.pink { background: var(--pink-light); }
-        .hero-float .icon.gold { background: #fdf3e0; }
-
-        /* ─── SECTION COMMON ─── */
-        section { padding: 100px 0; }
-        .section-label {
-            font-size: 0.8rem; font-weight: 700; letter-spacing: 2.5px;
-            text-transform: uppercase; color: var(--gold);
-            margin-bottom: 12px;
-        }
-        .section-title {
-            font-size: 2.4rem; margin-bottom: 16px; line-height: 1.3;
-        }
-        .section-subtitle {
-            font-size: 1.05rem; color: var(--text-light);
-            max-width: 560px; line-height: 1.8;
-        }
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header .section-subtitle { margin: 0 auto; }
-
-        .divider {
-            width: 60px; height: 2px; background: var(--gold-light);
-            margin: 20px auto 0;
-        }
-
-        /* ─── ABOUT ─── */
-        #about { background: var(--white); }
-        .about-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 80px; align-items: center;
-        }
-        .about-image {
-            width: 100%; aspect-ratio: 4/5; border-radius: 24px;
-            background: linear-gradient(135deg, var(--pink-light), var(--gold-light));
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        .about-image svg { width: 180px; height: 180px; opacity: 0.5; }
-        .about-image::after {
-            content: ''; position: absolute; inset: 0;
-            border: 2px solid var(--gold-light); border-radius: 24px;
-            transform: translate(12px, 12px); z-index: -1;
-        }
-        .about-content .section-subtitle { max-width: 100%; margin-bottom: 28px; }
-        .about-stats {
-            display: flex; gap: 40px; margin-top: 32px;
-            padding-top: 32px; border-top: 1px solid rgba(200,169,110,0.2);
-        }
-        .stat h3 { font-size: 2rem; color: var(--gold-dark); }
-        .stat p { font-size: 0.85rem; color: var(--text-light); margin-top: 4px; }
-
-        /* ─── CATEGORIES ─── */
-        #categories { background: var(--bg); }
-        .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        .cat-card {
-            background: var(--white); border-radius: 20px;
-            padding: 36px 24px; text-align: center;
-            border: 1px solid rgba(200,169,110,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-        .cat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(194,112,136,0.1);
-        }
-        .cat-icon {
-            width: 70px; height: 70px; border-radius: 50%;
-            margin: 0 auto 20px; display: flex;
-            align-items: center; justify-content: center;
-            font-size: 1.8rem;
-        }
-        .cat-card:nth-child(1) .cat-icon { background: #fff0f3; }
-        .cat-card:nth-child(2) .cat-icon { background: #fdf3e0; }
-        .cat-card:nth-child(3) .cat-icon { background: #f0f7f4; }
-        .cat-card:nth-child(4) .cat-icon { background: #f3f0ff; }
-        .cat-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
-        .cat-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
-
-        /* ─── FEATURED POSTS ─── */
-        #posts { background: var(--white); }
-        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .post-card {
-            border-radius: 20px; overflow: hidden;
-            background: var(--white);
-            border: 1px solid rgba(200,169,110,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .post-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(194,112,136,0.1);
-        }
-        .post-thumb {
-            height: 220px; position: relative; overflow: hidden;
-        }
-        .post-thumb-bg {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .post-tag {
-            position: absolute; top: 16px; left: 16px;
-            background: var(--white); color: var(--gold-dark);
-            font-size: 0.72rem; font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase;
-            padding: 6px 14px; border-radius: 50px;
-        }
-        .post-body { padding: 28px 24px; }
-        .post-meta {
-            font-size: 0.8rem; color: var(--text-light);
-            margin-bottom: 12px; display: flex; gap: 16px;
-        }
-        .post-body h3 {
-            font-size: 1.2rem; line-height: 1.4; margin-bottom: 12px;
-            transition: color 0.3s;
-        }
-        .post-card:hover .post-body h3 { color: var(--pink-dark); }
-        .post-body p {
-            font-size: 0.92rem; color: var(--text-light); line-height: 1.7;
-            margin-bottom: 18px;
-        }
-        .read-more {
-            font-size: 0.82rem; font-weight: 700; color: var(--gold-dark);
-            letter-spacing: 0.8px; text-transform: uppercase;
-            display: inline-flex; align-items: center; gap: 6px;
-        }
-        .read-more:hover { color: var(--pink-dark); }
-        .read-more svg { width: 14px; height: 14px; transition: transform 0.3s; }
-        .read-more:hover svg { transform: translateX(4px); }
-
-        /* ─── TIPS ─── */
-        #tips { background: linear-gradient(135deg, var(--pink-light), #fdf6ee); }
-        .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .tip-card {
-            background: var(--white); border-radius: 20px;
-            padding: 36px 28px; position: relative;
-            border: 1px solid rgba(200,169,110,0.08);
-        }
-        .tip-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem; font-weight: 700;
-            color: var(--pink); opacity: 0.4;
-            position: absolute; top: 16px; right: 24px;
-        }
-        .tip-card h3 { font-size: 1.15rem; margin-bottom: 12px; }
-        .tip-card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.7; }
-
-        /* ─── NEWSLETTER ─── */
-        #newsletter {
-            background: linear-gradient(135deg, var(--text) 0%, #5a3a3e 100%);
-            color: var(--white); text-align: center;
-            padding: 80px 0;
-        }
-        #newsletter .section-label { color: var(--gold-light); }
-        #newsletter .section-title { color: var(--white); }
-        #newsletter .section-subtitle { color: rgba(255,255,255,0.65); margin: 0 auto 36px; }
-        .newsletter-form {
-            display: flex; max-width: 480px; margin: 0 auto;
-            border-radius: 50px; overflow: hidden;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-        .newsletter-form input {
-            flex: 1; padding: 16px 24px; background: transparent;
-            border: none; color: var(--white); font-size: 0.95rem;
-            font-family: 'Lato', sans-serif; outline: none;
-        }
-        .newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
-        .newsletter-form button {
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border: none; color: var(--white);
-            font-weight: 700; font-size: 0.82rem;
-            letter-spacing: 1.2px; text-transform: uppercase;
-            cursor: pointer; transition: opacity 0.3s;
-            font-family: 'Lato', sans-serif;
-        }
-        .newsletter-form button:hover { opacity: 0.9; }
-
-        /* ─── GALLERY ─── */
-        #gallery { background: var(--white); }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto auto;
-            gap: 16px;
-        }
-        .gallery-item {
-            border-radius: 16px; overflow: hidden;
-            position: relative; cursor: pointer;
-            aspect-ratio: 1;
-        }
-        .gallery-item:nth-child(1) {
-            grid-column: 1 / 3; grid-row: 1 / 3;
-            aspect-ratio: auto;
-        }
-        .gallery-item-bg {
-            width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; transition: transform 0.5s;
-        }
-        .gallery-item:nth-child(1) .gallery-item-bg { background: linear-gradient(135deg, #f8c8d4, #e6d5a8); }
-        .gallery-item:nth-child(2) .gallery-item-bg { background: linear-gradient(135deg, #fdf3e0, #f8c8d4); }
-        .gallery-item:nth-child(3) .gallery-item-bg { background: linear-gradient(135deg, #f0f7f4, #e6d5a8); }
-        .gallery-item:nth-child(4) .gallery-item-bg { background: linear-gradient(135deg, #f3f0ff, #f8c8d4); }
-        .gallery-item:nth-child(5) .gallery-item-bg { background: linear-gradient(135deg, #e6d5a8, #f0f7f4); }
-        .gallery-item:hover .gallery-item-bg { transform: scale(1.05); }
-        .gallery-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(61,44,46,0.6), transparent);
-            opacity: 0; transition: opacity 0.3s;
-            display: flex; align-items: flex-end; padding: 20px;
-        }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-overlay p { color: var(--white); font-weight: 700; font-size: 0.95rem; }
-
-        /* ─── CONTACT ─── */
-        #contact { background: var(--bg); }
-        .contact-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-        }
-        .contact-info h3 { font-size: 1.6rem; margin-bottom: 16px; }
-        .contact-info > p { color: var(--text-light); margin-bottom: 32px; line-height: 1.8; }
-        .contact-detail {
-            display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px;
-        }
-        .contact-detail .cd-icon {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: var(--pink-light); display: flex;
-            align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 1.1rem;
-        }
-        .contact-detail h4 { font-size: 0.95rem; margin-bottom: 4px; }
-        .contact-detail p { font-size: 0.9rem; color: var(--text-light); }
-        .contact-form { display: flex; flex-direction: column; gap: 18px; }
-        .form-row { display: flex; gap: 18px; }
-        .form-row > * { flex: 1; }
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%; padding: 14px 20px; border-radius: 12px;
-            border: 1px solid rgba(200,169,110,0.2);
-            background: var(--white); font-family: 'Lato', sans-serif;
-            font-size: 0.95rem; color: var(--text);
-            outline: none; transition: border-color 0.3s;
-        }
-        .contact-form input:focus,
-        .contact-form textarea:focus { border-color: var(--gold); }
-        .contact-form textarea { resize: vertical; min-height: 130px; }
-
-        /* ─── FOOTER ─── */
-        footer {
-            background: var(--text); color: rgba(255,255,255,0.5);
-            padding: 60px 0 30px;
-        }
-        .footer-grid {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 48px; margin-bottom: 48px;
-        }
-        .footer-brand .logo { color: var(--pink); font-size: 1.4rem; }
-        .footer-brand .logo span { color: var(--gold-light); }
-        .footer-brand p { margin-top: 14px; font-size: 0.9rem; line-height: 1.7; }
-        .footer-col h4 {
-            font-family: 'Lato', sans-serif; font-size: 0.8rem;
-            font-weight: 700; letter-spacing: 1.5px;
-            text-transform: uppercase; color: rgba(255,255,255,0.7);
-            margin-bottom: 20px;
-        }
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 10px; }
-        .footer-col a { font-size: 0.9rem; transition: color 0.3s; }
-        .footer-col a:hover { color: var(--gold-light); }
-        .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 28px; display: flex;
-            justify-content: space-between; align-items: center;
-            font-size: 0.85rem;
-        }
-        .social-links { display: flex; gap: 16px; }
-        .social-links a {
-            width: 38px; height: 38px; border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.3s;
-        }
-        .social-links a:hover { background: var(--gold-dark); }
-        .social-links svg { width: 16px; height: 16px; fill: rgba(255,255,255,0.6); }
-
-        /* ─── BACK TO TOP ─── */
-        .back-top {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 46px; height: 46px; border-radius: 50%;
-            background: var(--gold); color: var(--white);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; opacity: 0; visibility: hidden;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(200,169,110,0.3);
-            border: none; z-index: 50;
-        }
-        .back-top.visible { opacity: 1; visibility: visible; }
-        .back-top:hover { transform: translateY(-3px); background: var(--gold-dark); }
-
-        /* ─── ANIMATIONS ─── */
-        .fade-up {
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
-
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 992px) {
-            .hero .container { grid-template-columns: 1fr; text-align: center; }
-            .hero-text p { margin: 0 auto 32px; }
-            .hero-visual { display: none; }
-            .hero-text h1 { font-size: 2.8rem; }
-            .about-grid { grid-template-columns: 1fr; gap: 40px; }
-            .posts-grid { grid-template-columns: repeat(2, 1fr); }
-            .tips-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-            .gallery-item:nth-child(1) { grid-column: 1 / 3; }
-            .contact-grid { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none; position: fixed;
-                top: 72px; left: 0; right: 0;
-                background: rgba(255,250,248,0.98);
-                flex-direction: column; align-items: center;
-                padding: 32px 0; gap: 24px;
-                border-bottom: 1px solid rgba(200,169,110,0.15);
+    <title>Soloda — Beauty Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: { 50:'#fdfcfa', 100:'#faf7f2', 200:'#f3ede4', 300:'#e8dfd2' },
+                        rose: { 50:'#fef7f8', 100:'#fce8ec', 200:'#f2c4cc', 300:'#e49dab', 400:'#d4798e', 500:'#b85d73', 600:'#9a4a5e' },
+                        champagne: { 50:'#fdfaf5', 100:'#f9f0e0', 200:'#e8d6b5', 300:'#d4bc8a', 400:'#c2a56d', 500:'#a88b50', 600:'#8a7040' },
+                        charcoal: { 700:'#4a3f41', 800:'#362d2f', 900:'#251e20' }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['Jost', 'Helvetica Neue', 'sans-serif'],
+                    }
+                }
             }
-            .nav-links.active { display: flex; }
-            .hamburger { display: flex; }
-            .hero-text h1 { font-size: 2.2rem; }
-            .cat-grid { grid-template-columns: repeat(2, 1fr); }
-            .posts-grid { grid-template-columns: 1fr; }
-            .tips-grid { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: 1fr 1fr; }
-            .gallery-item:nth-child(1) { grid-column: 1 / 3; }
-            .section-title { font-size: 1.9rem; }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-            .form-row { flex-direction: column; gap: 18px; }
-            .newsletter-form { flex-direction: column; border-radius: 16px; }
-            .newsletter-form input { text-align: center; }
-            .newsletter-form button { border-radius: 0 0 16px 16px; }
+        }
+    </script>
+    <style>
+        :root {
+            --soft-shadow: 0 22px 60px rgba(37, 30, 32, 0.08);
+            --card-border: rgba(194, 165, 109, 0.15);
+            --surface-glow: linear-gradient(135deg, rgba(255,255,255,0.62), rgba(255,255,255,0.24));
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                radial-gradient(circle at 18% 18%, rgba(212,121,142,0.05), transparent 42%),
+                radial-gradient(circle at 82% 12%, rgba(194,165,109,0.07), transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(194,165,109,0.05), transparent 44%);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: radial-gradient(rgba(37,30,32,0.04) 0.5px, transparent 0.5px);
+            background-size: 5px 5px;
+            opacity: 0.22;
+            pointer-events: none;
+        }
+
+        *::selection { background: rgba(212,121,142,0.15); }
+
+        /* Scroll progress — ultra thin gold line */
+        #scroll-progress {
+            position: fixed; top: 0; left: 0; height: 1.5px; z-index: 200;
+            background: linear-gradient(90deg, transparent, #c2a56d 30%, #d4798e 70%, transparent);
+            transition: width 0.15s ease;
+        }
+
+        /* Cursor glow — very subtle */
+        #cursor-glow {
+            position: fixed; width: 400px; height: 400px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(194,165,109,0.035), transparent 65%);
+            pointer-events: none; z-index: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Particles */
+        #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+        /* Magnetic button glow */
+        .mag-btn { position: relative; overflow: hidden; }
+        .mag-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.12), transparent 60%);
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .mag-btn:hover::before { opacity: 1; }
+
+        /* Marquee */
+        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .marquee-track { animation: marquee 40s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 300;
+            background: rgba(37,30,32,0.88); backdrop-filter: blur(24px) saturate(1.2);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+
+        /* Testimonial track */
+        .test-track { transition: transform 0.7s cubic-bezier(0.33,1,0.68,1); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: rgba(54,45,47,0.95); backdrop-filter: blur(12px);
+            color: #f3ede4; padding: 14px 28px; border-radius: 100px;
+            font-size: 0.82rem; font-weight: 400; letter-spacing: 0.3px;
+            z-index: 400; border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1), opacity 0.5s;
+            opacity: 0;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Reveals */
+        .rv { opacity: 0; transform: translateY(32px); }
+        .rv-l { opacity: 0; transform: translateX(-32px); }
+        .rv-r { opacity: 0; transform: translateX(32px); }
+
+        /* Float */
+        @keyframes gentle-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        .gf { animation: gentle-float 4s ease-in-out infinite; }
+        .gf-d { animation: gentle-float 4s ease-in-out 1.5s infinite; }
+
+        /* Typed cursor */
+        .type-cursor { display:inline-block; width:1.5px; height:0.95em; background:#d4798e; margin-left:3px; animation:tcblink 1s ease-in-out infinite; vertical-align:text-bottom; }
+        @keyframes tcblink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* Gradient text */
+        .grad-text {
+            background: linear-gradient(135deg, #d4798e 0%, #c2a56d 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* Elegant divider */
+        .e-divider { display: flex; align-items: center; gap: 16px; justify-content: center; margin-top: 20px; }
+        .e-divider::before, .e-divider::after { content:''; width: 40px; height: 0.5px; background: linear-gradient(90deg, transparent, #d4bc8a, transparent); }
+
+        /* Accordion */
+        .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+        /* Tilt */
+        .tilt-el { transform-style: preserve-3d; will-change: transform; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #faf7f2; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(#d4798e, #c2a56d); border-radius: 10px; }
+
+        /* Nav dot */
+        .nav-active-dot { width:3px; height:3px; border-radius:50%; background:#c2a56d; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); opacity:0; transition:opacity 0.3s; }
+        .nv-link.active .nav-active-dot { opacity:1; }
+
+        /* Image shimmer on hover */
+        .img-shimmer::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%);
+            transform: translateX(-100%); transition: transform 0.8s;
+        }
+        .img-shimmer:hover::after { transform: translateX(100%); }
+
+        /* Stagger children */
+        .stg > * { opacity: 0; transform: translateY(24px); }
+
+        /* Pulse ring */
+        @keyframes pr { 0%{transform:scale(1);opacity:0.5} 100%{transform:scale(1.6);opacity:0} }
+        .pr::after { content:''; position:absolute; inset:-3px; border-radius:50%; border:1px solid #c2a56d; animation:pr 2.5s ease-out infinite; }
+
+        /* Dark mode */
+        .dm * { transition: background-color 0.5s, color 0.5s, border-color 0.5s; }
+
+        .elegant-card {
+            border: 1px solid var(--card-border);
+            box-shadow: var(--soft-shadow);
+            backdrop-filter: blur(14px) saturate(1.1);
+            background: var(--surface-glow);
         }
     </style>
 </head>
-<body>
+<body class="font-sans text-charcoal-800 bg-cream-50 overflow-x-hidden antialiased dm tracking-[0.01em]" id="body">
 
-<!-- NAVBAR -->
-<nav id="navbar">
-    <div class="container">
-        <a href="#" class="logo">Glow <span>&</span> Grace</a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#about">About</a></li>
-            <li><a href="#categories">Topics</a></li>
-            <li><a href="#posts">Blog</a></li>
-            <li><a href="#tips">Tips</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#contact">Contact</a></li>
+<div id="scroll-progress" style="width:0%"></div>
+<div id="cursor-glow"></div>
+<canvas id="particles"></canvas>
+
+<!-- ════════════════ NAVBAR ════════════════ -->
+<nav id="navbar" class="fixed top-0 inset-x-0 z-50 bg-cream-50/85 backdrop-blur-2xl border-b border-champagne-200/15 transition-all duration-500">
+    <div class="max-w-6xl mx-auto px-8 flex items-center justify-between h-[76px]">
+        <a href="#" class="font-serif text-[1.7rem] font-medium tracking-[0.12em] text-charcoal-800 hover:text-rose-400 transition-colors duration-500">Soloda</a>
+        <ul class="hidden md:flex items-center gap-10" id="navLinks">
+            <li><a href="#about" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">About<span class="nav-active-dot"></span></a></li>
+            <li><a href="#journal" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">Journal<span class="nav-active-dot"></span></a></li>
+            <li><a href="#rituals" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">Rituals<span class="nav-active-dot"></span></a></li>
+            <li><a href="#voices" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">Voices<span class="nav-active-dot"></span></a></li>
+            <li><a href="#gallery" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">Gallery<span class="nav-active-dot"></span></a></li>
+            <li><a href="#contact" class="nv-link relative text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-all duration-400 py-2">Contact<span class="nav-active-dot"></span></a></li>
         </ul>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="flex items-center gap-5">
+            <button id="darkToggle" class="relative w-[42px] h-[22px] rounded-full bg-champagne-200/30 cursor-pointer flex items-center transition-colors duration-400" title="Toggle theme">
+                <span id="toggleDot" class="absolute left-[3px] w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-400 flex items-center justify-center text-[9px]">&#9728;</span>
+            </button>
+            <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-1 cursor-pointer bg-transparent border-none" aria-label="Menu">
+                <span class="w-5 h-[1.5px] bg-charcoal-800 rounded transition-all duration-400 origin-center"></span>
+                <span class="w-5 h-[1.5px] bg-charcoal-800 rounded transition-all duration-400"></span>
+                <span class="w-5 h-[1.5px] bg-charcoal-800 rounded transition-all duration-400 origin-center"></span>
+            </button>
+        </div>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden bg-cream-50/98 backdrop-blur-2xl border-b border-champagne-200/15 pb-8">
+        <ul class="flex flex-col items-center gap-6 pt-6">
+            <li><a href="#about" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">About</a></li>
+            <li><a href="#journal" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">Journal</a></li>
+            <li><a href="#rituals" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">Rituals</a></li>
+            <li><a href="#voices" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">Voices</a></li>
+            <li><a href="#gallery" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">Gallery</a></li>
+            <li><a href="#contact" class="mob-link text-[11px] font-medium tracking-[2.5px] uppercase text-charcoal-700/50 hover:text-champagne-500 transition-colors">Contact</a></li>
+        </ul>
     </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="hero">
-    <div class="container">
-        <div class="hero-text fade-up">
-            <h1>Discover Your <em>Natural</em> Glow</h1>
-            <p>Your destination for honest beauty reviews, skincare science, and self-care rituals that celebrate every skin tone and type.</p>
-            <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:inherit;">
-                <a href="#posts" class="btn">Read the Blog</a>
-                <a href="#newsletter" class="btn btn-outline">Subscribe</a>
+<!-- ════════════════ HERO ════════════════ -->
+<section id="hero" class="min-h-screen flex items-center relative overflow-hidden bg-cream-50">
+    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-champagne-200/8 to-transparent blur-[80px] gf"></div>
+    <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-gradient-to-br from-rose-200/8 to-transparent blur-[80px] gf-d"></div>
+    <div class="absolute top-[30%] right-[20%] w-1.5 h-1.5 rounded-full bg-champagne-400/20 gf"></div>
+    <div class="absolute top-[25%] left-[30%] w-1 h-1 rounded-full bg-rose-300/20 gf-d"></div>
+
+    <div class="max-w-6xl mx-auto px-8 grid lg:grid-cols-2 gap-20 items-center relative z-10 py-32">
+        <div class="rv">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-8 h-[0.5px] bg-champagne-400/60"></div>
+                <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/70">Est. 2024</span>
+            </div>
+            <h1 class="font-serif text-[3.6rem] lg:text-[4.5rem] xl:text-[5.2rem] font-light leading-[1.05] mb-8 tracking-[-0.01em]">
+                Discover Your<br><em class="font-medium italic grad-text" id="typed-target">Natural Glow</em><span class="type-cursor"></span>
+            </h1>
+            <p class="text-[15px] text-charcoal-700/45 max-w-[420px] mb-12 leading-[1.9] font-light">
+                A curated space for honest beauty reviews, evidence-based skincare, and self-care rituals that honor every skin tone and story.
+            </p>
+            <div class="flex flex-wrap gap-5 items-center">
+                <a href="#journal" class="mag-btn group inline-flex items-center gap-3 px-8 py-[14px] bg-charcoal-800 text-cream-100 text-[10.5px] font-medium tracking-[2px] uppercase rounded-full hover:bg-charcoal-900 transition-all duration-500 shadow-lg shadow-charcoal-800/10">
+                    Explore Journal
+                    <svg class="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#subscribe" class="inline-flex items-center gap-2 text-[10.5px] font-medium tracking-[2px] uppercase text-charcoal-700/40 hover:text-champagne-500 transition-colors duration-400 group">
+                    Subscribe
+                    <svg class="w-3 h-3 opacity-40 group-hover:opacity-70 transition-opacity" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
             </div>
         </div>
-        <div class="hero-visual fade-up">
-            <div class="hero-image-wrapper">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#c27088" d="M45,-62.7C56.3,-53.5,62.1,-37.7,66.4,-21.5C70.7,-5.3,73.5,11.3,68.2,24.8C62.9,38.3,49.5,48.7,35.4,57.1C21.3,65.5,6.5,71.9,-9.4,73C-25.3,74.1,-42.3,69.9,-53.5,59.3C-64.7,48.7,-70.1,31.7,-72.6,14.4C-75.1,-2.9,-74.7,-20.5,-66.8,-33.4C-58.9,-46.3,-43.5,-54.5,-28.8,-62.1C-14.1,-69.7,0,-76.7,14,-75.5C28,-74.3,33.7,-71.9,45,-62.7Z" transform="translate(100 100)"/>
+        <div class="hidden lg:flex justify-center items-center relative rv-r">
+            <div class="w-[380px] h-[460px] rounded-[180px_180px_140px_140px] overflow-hidden elegant-card flex items-center justify-center relative group">
+                <svg viewBox="0 0 200 200" class="w-56 h-56 opacity-25 group-hover:scale-105 transition-transform duration-[1.2s] ease-out" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#d4798e" d="M45,-62.7C56.3,-53.5,62.1,-37.7,66.4,-21.5C70.7,-5.3,73.5,11.3,68.2,24.8C62.9,38.3,49.5,48.7,35.4,57.1C21.3,65.5,6.5,71.9,-9.4,73C-25.3,74.1,-42.3,69.9,-53.5,59.3C-64.7,48.7,-70.1,31.7,-72.6,14.4C-75.1,-2.9,-74.7,-20.5,-66.8,-33.4C-58.9,-46.3,-43.5,-54.5,-28.8,-62.1C-14.1,-69.7,0,-76.7,14,-75.5C28,-74.3,33.7,-71.9,45,-62.7Z" transform="translate(100 100)"/>
+                </svg>
+                <div class="absolute top-10 right-10 text-xl opacity-30 gf">&#10024;</div>
+                <div class="absolute bottom-14 left-12 text-sm opacity-20 gf-d">&#10024;</div>
+            </div>
+            <div class="absolute -top-3 -right-3 elegant-card rounded-2xl px-5 py-3.5 flex items-center gap-3 gf">
+                <div class="w-9 h-9 rounded-full bg-rose-50 flex items-center justify-center text-sm relative pr">&#10024;</div>
+                <div><div class="text-sm font-semibold text-charcoal-800">500+</div><div class="text-[10px] text-charcoal-700/35 font-light">Beauty Rituals</div></div>
+            </div>
+            <div class="absolute bottom-8 -left-6 elegant-card rounded-2xl px-5 py-3.5 flex items-center gap-3 gf-d">
+                <div class="w-9 h-9 rounded-full bg-champagne-50 flex items-center justify-center text-sm">&#9829;</div>
+                <div><div class="text-sm font-semibold text-charcoal-800">12K+</div><div class="text-[10px] text-charcoal-700/35 font-light">Readers</div></div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5">
+        <span class="text-[9px] tracking-[3px] uppercase font-medium text-charcoal-700/25">Scroll</span>
+        <div class="w-[18px] h-[28px] rounded-full border border-charcoal-700/12 flex justify-center pt-1.5">
+            <div class="w-[3px] h-[6px] rounded-full bg-champagne-400/40 animate-bounce"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════ MARQUEE ════════════════ -->
+<div class="bg-charcoal-800 py-4 overflow-hidden">
+    <div class="flex marquee-track whitespace-nowrap">
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Skincare <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Makeup <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Wellness <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Haircare <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Self-Care <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Reviews <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Tutorials <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Skincare <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Makeup <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Wellness <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Haircare <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Self-Care <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Reviews <span class="text-rose-300/30 mx-5">&#183;</span></span>
+        <span class="inline-flex items-center text-[11px] font-light tracking-[4px] uppercase text-white/20 mx-10">Tutorials <span class="text-champagne-400/30 mx-5">&#183;</span></span>
+    </div>
+</div>
+
+<!-- ════════════════ ABOUT ════════════════ -->
+<section id="about" class="py-32 bg-white relative">
+    <div class="max-w-6xl mx-auto px-8 grid lg:grid-cols-2 gap-24 items-center">
+        <div class="rv-l relative">
+            <div class="aspect-[3/4] rounded-[32px] bg-gradient-to-br from-cream-100 via-rose-50/50 to-champagne-50 flex items-center justify-center overflow-hidden group">
+                <svg viewBox="0 0 200 200" class="w-40 h-40 opacity-20 group-hover:rotate-6 transition-transform duration-[1.5s]" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#c2a56d" d="M39.5,-51.1C50.9,-44.8,59.5,-32.5,64.2,-18.5C68.9,-4.5,69.7,11.2,63.9,23.9C58.1,36.6,45.7,46.3,32.4,53.5C19.1,60.7,4.9,65.4,-9.8,64.1C-24.5,62.8,-39.7,55.5,-50.4,44.2C-61.1,32.9,-67.3,17.6,-67.6,2C-67.9,-13.6,-62.3,-29.5,-52,-40.1C-41.7,-50.7,-26.7,-56,-12.1,-56.5C2.5,-57,28.1,-57.4,39.5,-51.1Z" transform="translate(100 100)"/>
                 </svg>
             </div>
-            <div class="hero-float top-right">
-                <div class="icon pink">&#10024;</div>
-                <div><div style="font-size:1.1rem;color:var(--gold-dark);">500+</div><div style="font-size:0.78rem;color:var(--text-light);">Beauty Tips</div></div>
-            </div>
-            <div class="hero-float bottom-left">
-                <div class="icon gold">&#9829;</div>
-                <div><div style="font-size:1.1rem;color:var(--gold-dark);">12K+</div><div style="font-size:0.78rem;color:var(--text-light);">Happy Readers</div></div>
-            </div>
+            <div class="absolute -bottom-3 -right-3 w-full h-full rounded-[32px] border border-champagne-200/25 -z-10"></div>
         </div>
-    </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-    <div class="container">
-        <div class="about-grid">
-            <div class="about-image fade-up">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#c9a96e" opacity="0.5" d="M39.5,-51.1C50.9,-44.8,59.5,-32.5,64.2,-18.5C68.9,-4.5,69.7,11.2,63.9,23.9C58.1,36.6,45.7,46.3,32.4,53.5C19.1,60.7,4.9,65.4,-9.8,64.1C-24.5,62.8,-39.7,55.5,-50.4,44.2C-61.1,32.9,-67.3,17.6,-67.6,2C-67.9,-13.6,-62.3,-29.5,-52,-40.1C-41.7,-50.7,-26.7,-56,-12.1,-56.5C2.5,-57,28.1,-57.4,39.5,-51.1Z" transform="translate(100 100)"/>
-                </svg>
+        <div class="rv-r">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-6 h-[0.5px] bg-champagne-400/50"></div>
+                <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Our Philosophy</span>
             </div>
-            <div class="about-content fade-up">
-                <p class="section-label">About the Blog</p>
-                <h2 class="section-title">Beauty That Feels Like You</h2>
-                <p class="section-subtitle">Welcome to Glow & Grace — a beauty blog born from the belief that self-care is personal. We share evidence-based skincare advice, curated product reviews, and wellness rituals designed for real life, not just Instagram.</p>
-                <p class="section-subtitle">Whether you're building your first skincare routine or deep-diving into ingredient science, we're here to make beauty approachable and joyful.</p>
-                <div class="about-stats">
-                    <div class="stat"><h3>200+</h3><p>Articles Published</p></div>
-                    <div class="stat"><h3>50+</h3><p>Products Reviewed</p></div>
-                    <div class="stat"><h3>12K</h3><p>Monthly Readers</p></div>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light leading-[1.1] mb-7 tracking-[-0.01em]">Beauty That Feels <span class="grad-text font-medium italic">Like You</span></h2>
+            <p class="text-[14.5px] text-charcoal-700/40 leading-[1.9] mb-4 font-light">Welcome to Soloda — a beauty journal born from the belief that self-care is deeply personal. We share evidence-based skincare wisdom, thoughtfully curated reviews, and wellness rituals designed for real life.</p>
+            <p class="text-[14.5px] text-charcoal-700/40 leading-[1.9] mb-10 font-light">Whether you're building your first routine or exploring ingredient science, we're here to make beauty feel approachable, joyful, and entirely yours.</p>
+            <div class="flex gap-14 pt-8 border-t border-champagne-200/20">
+                <div>
+                    <h3 class="font-serif text-[2.2rem] font-light text-charcoal-800"><span class="counter-val" data-target="200">0</span><span class="text-champagne-400 text-lg">+</span></h3>
+                    <p class="text-[11px] text-charcoal-700/30 mt-1 tracking-[1px] uppercase font-medium">Articles</p>
+                </div>
+                <div>
+                    <h3 class="font-serif text-[2.2rem] font-light text-charcoal-800"><span class="counter-val" data-target="50">0</span><span class="text-champagne-400 text-lg">+</span></h3>
+                    <p class="text-[11px] text-charcoal-700/30 mt-1 tracking-[1px] uppercase font-medium">Reviews</p>
+                </div>
+                <div>
+                    <h3 class="font-serif text-[2.2rem] font-light text-charcoal-800"><span class="counter-val" data-target="12">0</span><span class="text-champagne-400 text-lg">K</span></h3>
+                    <p class="text-[11px] text-charcoal-700/30 mt-1 tracking-[1px] uppercase font-medium">Readers</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CATEGORIES -->
-<section id="categories">
-    <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-label">Explore Topics</p>
-            <h2 class="section-title">What We Write About</h2>
-            <p class="section-subtitle">From daily skincare routines to makeup artistry — find the inspiration you're looking for.</p>
-            <div class="divider"></div>
+<!-- ════════════════ CATEGORIES ════════════════ -->
+<section id="categories" class="py-32 bg-cream-50">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="text-center mb-20 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Explore</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">What We Write About</h2>
+            <div class="e-divider"><span class="text-[10px] text-champagne-400/40">&#9830;</span></div>
         </div>
-        <div class="cat-grid">
-            <div class="cat-card fade-up">
-                <div class="cat-icon">&#127807;</div>
-                <h3>Skincare</h3>
-                <p>Routines, ingredient guides, and reviews for every skin type.</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 stg" id="catGrid">
+            <div class="tilt-el group bg-white rounded-3xl p-10 text-center border border-cream-300/30 hover:border-champagne-200/50 hover:shadow-xl hover:shadow-rose-100/20 hover:-translate-y-1.5 transition-all duration-700 cursor-pointer">
+                <div class="w-14 h-14 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-6 text-xl group-hover:scale-105 transition-transform duration-500">&#127807;</div>
+                <h3 class="font-serif text-xl font-medium mb-2.5">Skincare</h3>
+                <p class="text-[13px] text-charcoal-700/35 leading-[1.8] font-light">Routines, ingredient guides, and reviews for every skin type.</p>
             </div>
-            <div class="cat-card fade-up">
-                <div class="cat-icon">&#128132;</div>
-                <h3>Makeup</h3>
-                <p>Tutorials, product picks, and trends from subtle to bold.</p>
+            <div class="tilt-el group bg-white rounded-3xl p-10 text-center border border-cream-300/30 hover:border-champagne-200/50 hover:shadow-xl hover:shadow-rose-100/20 hover:-translate-y-1.5 transition-all duration-700 cursor-pointer">
+                <div class="w-14 h-14 rounded-full bg-champagne-50 flex items-center justify-center mx-auto mb-6 text-xl group-hover:scale-105 transition-transform duration-500">&#128132;</div>
+                <h3 class="font-serif text-xl font-medium mb-2.5">Makeup</h3>
+                <p class="text-[13px] text-charcoal-700/35 leading-[1.8] font-light">Tutorials, product picks, and trends from subtle to bold.</p>
             </div>
-            <div class="cat-card fade-up">
-                <div class="cat-icon">&#127793;</div>
-                <h3>Wellness</h3>
-                <p>Self-care rituals, nutrition tips, and mind-body balance.</p>
+            <div class="tilt-el group bg-white rounded-3xl p-10 text-center border border-cream-300/30 hover:border-champagne-200/50 hover:shadow-xl hover:shadow-rose-100/20 hover:-translate-y-1.5 transition-all duration-700 cursor-pointer">
+                <div class="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-6 text-xl group-hover:scale-105 transition-transform duration-500">&#127793;</div>
+                <h3 class="font-serif text-xl font-medium mb-2.5">Wellness</h3>
+                <p class="text-[13px] text-charcoal-700/35 leading-[1.8] font-light">Self-care rituals, nutrition tips, and inner balance.</p>
             </div>
-            <div class="cat-card fade-up">
-                <div class="cat-icon">&#128156;</div>
-                <h3>Haircare</h3>
-                <p>Healthy hair guides for all textures, types, and goals.</p>
+            <div class="tilt-el group bg-white rounded-3xl p-10 text-center border border-cream-300/30 hover:border-champagne-200/50 hover:shadow-xl hover:shadow-rose-100/20 hover:-translate-y-1.5 transition-all duration-700 cursor-pointer">
+                <div class="w-14 h-14 rounded-full bg-violet-50 flex items-center justify-center mx-auto mb-6 text-xl group-hover:scale-105 transition-transform duration-500">&#128156;</div>
+                <h3 class="font-serif text-xl font-medium mb-2.5">Haircare</h3>
+                <p class="text-[13px] text-charcoal-700/35 leading-[1.8] font-light">Healthy hair guides for all textures and goals.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- FEATURED POSTS -->
-<section id="posts">
-    <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-label">Latest Articles</p>
-            <h2 class="section-title">Featured Posts</h2>
-            <p class="section-subtitle">Hand-picked reads to help you feel confident and radiant in your own skin.</p>
-            <div class="divider"></div>
+<!-- ════════════════ JOURNAL (Blog) ════════════════ -->
+<section id="journal" class="py-32 bg-white">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="text-center mb-12 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Latest</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">The Journal</h2>
         </div>
-        <div class="posts-grid">
-            <article class="post-card fade-up">
-                <div class="post-thumb">
-                    <div class="post-thumb-bg" style="background:linear-gradient(135deg,#f8c8d4,#fdf3e0);display:flex;align-items:center;justify-content:center;font-size:3rem;">&#127802;</div>
-                    <span class="post-tag">Skincare</span>
+        <div class="flex justify-center mb-14 rv">
+            <div class="inline-flex bg-cream-100/60 rounded-full p-1 gap-1" id="filterTabs">
+                <button class="tab-btn active px-5 py-2 rounded-full text-[10px] font-medium tracking-[1.5px] uppercase transition-all duration-400 bg-charcoal-800 text-cream-100" data-filter="all">All</button>
+                <button class="tab-btn px-5 py-2 rounded-full text-[10px] font-medium tracking-[1.5px] uppercase transition-all duration-400 text-charcoal-700/35 hover:text-charcoal-700/60" data-filter="skincare">Skincare</button>
+                <button class="tab-btn px-5 py-2 rounded-full text-[10px] font-medium tracking-[1.5px] uppercase transition-all duration-400 text-charcoal-700/35 hover:text-charcoal-700/60" data-filter="makeup">Makeup</button>
+                <button class="tab-btn px-5 py-2 rounded-full text-[10px] font-medium tracking-[1.5px] uppercase transition-all duration-400 text-charcoal-700/35 hover:text-charcoal-700/60" data-filter="wellness">Wellness</button>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="postsGrid">
+            <article class="post-card group rounded-3xl overflow-hidden bg-white border border-cream-300/25 hover:shadow-2xl hover:shadow-rose-100/10 hover:-translate-y-1 transition-all duration-700" data-category="skincare">
+                <div class="h-52 relative overflow-hidden img-shimmer">
+                    <div class="w-full h-full bg-gradient-to-br from-rose-100/60 to-champagne-100/60 flex items-center justify-center text-5xl group-hover:scale-[1.03] transition-transform duration-[1.2s]">&#127802;</div>
+                    <span class="absolute top-4 left-4 bg-white/85 backdrop-blur-lg text-champagne-500 text-[9px] font-medium tracking-[1.5px] uppercase px-3 py-1.5 rounded-full">Skincare</span>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-1 group-hover:translate-y-0">
+                        <button class="like-btn w-8 h-8 rounded-full bg-white/85 backdrop-blur-lg flex items-center justify-center text-rose-400 hover:text-rose-500 transition-colors cursor-pointer border-none" title="Save"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+                    </div>
                 </div>
-                <div class="post-body">
-                    <div class="post-meta"><span>Feb 20, 2026</span><span>5 min read</span></div>
-                    <h3>The Ultimate Guide to Building a Morning Skincare Routine</h3>
-                    <p>Learn the correct order to layer your products for maximum glow, from cleanser to SPF.</p>
-                    <a href="#" class="read-more">Read More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                <div class="p-7">
+                    <div class="flex items-center gap-4 text-[10.5px] text-charcoal-700/25 mb-3 font-light"><span>Feb 20, 2026</span><span>&#183;</span><span>5 min</span></div>
+                    <h3 class="font-serif text-[1.2rem] font-medium leading-[1.35] mb-3 group-hover:text-rose-400 transition-colors duration-500">The Ultimate Guide to Building a Morning Skincare Routine</h3>
+                    <p class="text-[13px] text-charcoal-700/35 leading-[1.8] mb-5 font-light">Learn the correct order to layer your products for maximum glow, from cleanser to SPF.</p>
+                    <a href="#" class="inline-flex items-center gap-2 text-[10px] font-medium text-champagne-500 tracking-[1px] uppercase hover:text-rose-400 transition-colors duration-400 group/l">Read <svg class="w-3 h-3 opacity-50 group-hover/l:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
             </article>
-            <article class="post-card fade-up">
-                <div class="post-thumb">
-                    <div class="post-thumb-bg" style="background:linear-gradient(135deg,#e6d5a8,#f0f7f4);display:flex;align-items:center;justify-content:center;font-size:3rem;">&#9994;</div>
-                    <span class="post-tag">Makeup</span>
+            <article class="post-card group rounded-3xl overflow-hidden bg-white border border-cream-300/25 hover:shadow-2xl hover:shadow-rose-100/10 hover:-translate-y-1 transition-all duration-700" data-category="makeup">
+                <div class="h-52 relative overflow-hidden img-shimmer">
+                    <div class="w-full h-full bg-gradient-to-br from-champagne-100/60 to-emerald-50/40 flex items-center justify-center text-5xl group-hover:scale-[1.03] transition-transform duration-[1.2s]">&#128132;</div>
+                    <span class="absolute top-4 left-4 bg-white/85 backdrop-blur-lg text-champagne-500 text-[9px] font-medium tracking-[1.5px] uppercase px-3 py-1.5 rounded-full">Makeup</span>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-1 group-hover:translate-y-0">
+                        <button class="like-btn w-8 h-8 rounded-full bg-white/85 backdrop-blur-lg flex items-center justify-center text-rose-400 hover:text-rose-500 transition-colors cursor-pointer border-none" title="Save"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+                    </div>
                 </div>
-                <div class="post-body">
-                    <div class="post-meta"><span>Feb 14, 2026</span><span>7 min read</span></div>
-                    <h3>Soft Glam Makeup: A Step-by-Step Tutorial for Beginners</h3>
-                    <p>Master the art of everyday glam with drugstore products and easy-to-follow techniques.</p>
-                    <a href="#" class="read-more">Read More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                <div class="p-7">
+                    <div class="flex items-center gap-4 text-[10.5px] text-charcoal-700/25 mb-3 font-light"><span>Feb 14, 2026</span><span>&#183;</span><span>7 min</span></div>
+                    <h3 class="font-serif text-[1.2rem] font-medium leading-[1.35] mb-3 group-hover:text-rose-400 transition-colors duration-500">Soft Glam Makeup: A Step-by-Step Tutorial for Beginners</h3>
+                    <p class="text-[13px] text-charcoal-700/35 leading-[1.8] mb-5 font-light">Master the art of everyday glam with drugstore products and easy-to-follow techniques.</p>
+                    <a href="#" class="inline-flex items-center gap-2 text-[10px] font-medium text-champagne-500 tracking-[1px] uppercase hover:text-rose-400 transition-colors duration-400 group/l">Read <svg class="w-3 h-3 opacity-50 group-hover/l:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
             </article>
-            <article class="post-card fade-up">
-                <div class="post-thumb">
-                    <div class="post-thumb-bg" style="background:linear-gradient(135deg,#f3f0ff,#f8c8d4);display:flex;align-items:center;justify-content:center;font-size:3rem;">&#127811;</div>
-                    <span class="post-tag">Wellness</span>
+            <article class="post-card group rounded-3xl overflow-hidden bg-white border border-cream-300/25 hover:shadow-2xl hover:shadow-rose-100/10 hover:-translate-y-1 transition-all duration-700" data-category="wellness">
+                <div class="h-52 relative overflow-hidden img-shimmer">
+                    <div class="w-full h-full bg-gradient-to-br from-violet-50/50 to-rose-50/50 flex items-center justify-center text-5xl group-hover:scale-[1.03] transition-transform duration-[1.2s]">&#127811;</div>
+                    <span class="absolute top-4 left-4 bg-white/85 backdrop-blur-lg text-champagne-500 text-[9px] font-medium tracking-[1.5px] uppercase px-3 py-1.5 rounded-full">Wellness</span>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-1 group-hover:translate-y-0">
+                        <button class="like-btn w-8 h-8 rounded-full bg-white/85 backdrop-blur-lg flex items-center justify-center text-rose-400 hover:text-rose-500 transition-colors cursor-pointer border-none" title="Save"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+                    </div>
                 </div>
-                <div class="post-body">
-                    <div class="post-meta"><span>Feb 8, 2026</span><span>4 min read</span></div>
-                    <h3>5 Evening Self-Care Rituals That Transform Your Week</h3>
-                    <p>Simple wind-down habits that nourish your skin, calm your mind, and improve sleep quality.</p>
-                    <a href="#" class="read-more">Read More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                <div class="p-7">
+                    <div class="flex items-center gap-4 text-[10.5px] text-charcoal-700/25 mb-3 font-light"><span>Feb 8, 2026</span><span>&#183;</span><span>4 min</span></div>
+                    <h3 class="font-serif text-[1.2rem] font-medium leading-[1.35] mb-3 group-hover:text-rose-400 transition-colors duration-500">5 Evening Self-Care Rituals That Transform Your Week</h3>
+                    <p class="text-[13px] text-charcoal-700/35 leading-[1.8] mb-5 font-light">Simple wind-down habits that nourish your skin, calm your mind, and improve sleep.</p>
+                    <a href="#" class="inline-flex items-center gap-2 text-[10px] font-medium text-champagne-500 tracking-[1px] uppercase hover:text-rose-400 transition-colors duration-400 group/l">Read <svg class="w-3 h-3 opacity-50 group-hover/l:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
             </article>
         </div>
     </div>
 </section>
 
-<!-- BEAUTY TIPS -->
-<section id="tips">
-    <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-label">Quick Reads</p>
-            <h2 class="section-title">Beauty Tips & Tricks</h2>
-            <p class="section-subtitle">Bite-sized wisdom to level up your beauty routine instantly.</p>
-            <div class="divider"></div>
+<!-- ════════════════ RITUALS (Tips Accordion) ════════════════ -->
+<section id="rituals" class="py-32 bg-gradient-to-br from-cream-100/80 to-champagne-50/50">
+    <div class="max-w-3xl mx-auto px-8">
+        <div class="text-center mb-20 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Daily Wisdom</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">Beauty Rituals</h2>
+            <div class="e-divider"><span class="text-[10px] text-champagne-400/40">&#9830;</span></div>
         </div>
-        <div class="tips-grid">
-            <div class="tip-card fade-up">
-                <div class="tip-number">01</div>
-                <h3>Always Apply SPF</h3>
-                <p>Sunscreen is the single best anti-aging product. Use SPF 30+ daily, even on cloudy days and indoors near windows.</p>
+        <div class="space-y-4" id="accordion">
+            <div class="bg-white rounded-2xl border border-cream-300/25 overflow-hidden rv group">
+                <button class="acc-btn w-full flex items-center justify-between p-7 text-left cursor-pointer">
+                    <div class="flex items-center gap-5">
+                        <span class="font-serif text-xl text-champagne-200 font-light w-8">01</span>
+                        <h3 class="font-serif text-lg font-medium group-hover:text-rose-400 transition-colors duration-500">Always Apply SPF</h3>
+                    </div>
+                    <svg class="acc-icon w-4 h-4 text-champagne-400/50 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="acc-content"><p class="px-7 pb-7 text-[13.5px] text-charcoal-700/40 leading-[1.9] font-light pl-20">Sunscreen is the single best anti-aging product. Use SPF 30+ daily, even on cloudy days and indoors near windows. Reapply every 2 hours for maximum protection.</p></div>
             </div>
-            <div class="tip-card fade-up">
-                <div class="tip-number">02</div>
-                <h3>Hydrate Inside Out</h3>
-                <p>Drink water throughout the day and layer a hyaluronic acid serum under moisturizer for plump, dewy skin.</p>
+            <div class="bg-white rounded-2xl border border-cream-300/25 overflow-hidden rv group">
+                <button class="acc-btn w-full flex items-center justify-between p-7 text-left cursor-pointer">
+                    <div class="flex items-center gap-5">
+                        <span class="font-serif text-xl text-champagne-200 font-light w-8">02</span>
+                        <h3 class="font-serif text-lg font-medium group-hover:text-rose-400 transition-colors duration-500">Hydrate Inside Out</h3>
+                    </div>
+                    <svg class="acc-icon w-4 h-4 text-champagne-400/50 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="acc-content"><p class="px-7 pb-7 text-[13.5px] text-charcoal-700/40 leading-[1.9] font-light pl-20">Layer hyaluronic acid under moisturizer for dewy skin. Drink water throughout the day — aim for at least eight glasses daily.</p></div>
             </div>
-            <div class="tip-card fade-up">
-                <div class="tip-number">03</div>
-                <h3>Less Is More</h3>
-                <p>A focused routine of 4-5 great products beats a 12-step regimen. Give each product time to work before adding more.</p>
+            <div class="bg-white rounded-2xl border border-cream-300/25 overflow-hidden rv group">
+                <button class="acc-btn w-full flex items-center justify-between p-7 text-left cursor-pointer">
+                    <div class="flex items-center gap-5">
+                        <span class="font-serif text-xl text-champagne-200 font-light w-8">03</span>
+                        <h3 class="font-serif text-lg font-medium group-hover:text-rose-400 transition-colors duration-500">Less Is More</h3>
+                    </div>
+                    <svg class="acc-icon w-4 h-4 text-champagne-400/50 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="acc-content"><p class="px-7 pb-7 text-[13.5px] text-charcoal-700/40 leading-[1.9] font-light pl-20">A focused routine of four or five great products beats a twelve-step regimen. Give each product time to work before adding more.</p></div>
             </div>
-            <div class="tip-card fade-up">
-                <div class="tip-number">04</div>
-                <h3>Double Cleanse at Night</h3>
-                <p>Use an oil cleanser first to dissolve makeup and sunscreen, then follow with a gentle water-based cleanser.</p>
+            <div class="bg-white rounded-2xl border border-cream-300/25 overflow-hidden rv group">
+                <button class="acc-btn w-full flex items-center justify-between p-7 text-left cursor-pointer">
+                    <div class="flex items-center gap-5">
+                        <span class="font-serif text-xl text-champagne-200 font-light w-8">04</span>
+                        <h3 class="font-serif text-lg font-medium group-hover:text-rose-400 transition-colors duration-500">Double Cleanse at Night</h3>
+                    </div>
+                    <svg class="acc-icon w-4 h-4 text-champagne-400/50 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="acc-content"><p class="px-7 pb-7 text-[13.5px] text-charcoal-700/40 leading-[1.9] font-light pl-20">Start with an oil cleanser to dissolve makeup and sunscreen, then follow with a gentle water-based cleanser for a truly clean canvas.</p></div>
             </div>
-            <div class="tip-card fade-up">
-                <div class="tip-number">05</div>
-                <h3>Pat, Don't Rub</h3>
-                <p>Gently pat serums and creams into your skin instead of rubbing. It reduces irritation and boosts absorption.</p>
-            </div>
-            <div class="tip-card fade-up">
-                <div class="tip-number">06</div>
-                <h3>Clean Your Brushes</h3>
-                <p>Wash makeup brushes weekly to prevent bacteria buildup that causes breakouts and skin irritation.</p>
+            <div class="bg-white rounded-2xl border border-cream-300/25 overflow-hidden rv group">
+                <button class="acc-btn w-full flex items-center justify-between p-7 text-left cursor-pointer">
+                    <div class="flex items-center gap-5">
+                        <span class="font-serif text-xl text-champagne-200 font-light w-8">05</span>
+                        <h3 class="font-serif text-lg font-medium group-hover:text-rose-400 transition-colors duration-500">Pat, Don't Rub</h3>
+                    </div>
+                    <svg class="acc-icon w-4 h-4 text-champagne-400/50 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="acc-content"><p class="px-7 pb-7 text-[13.5px] text-charcoal-700/40 leading-[1.9] font-light pl-20">Gently pat serums and creams into your skin. It minimizes irritation and maximizes absorption for noticeably better results.</p></div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- NEWSLETTER -->
-<section id="newsletter">
-    <div class="container fade-up">
-        <p class="section-label">Stay in the Loop</p>
-        <h2 class="section-title">Join Our Beauty Letter</h2>
-        <p class="section-subtitle">Get weekly beauty tips, product reviews, and exclusive content delivered straight to your inbox.</p>
-        <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed!'; this.querySelector('input').value='';">
-            <input type="email" placeholder="Enter your email address" required>
-            <button type="submit">Subscribe</button>
+<!-- ════════════════ TESTIMONIALS ════════════════ -->
+<section id="voices" class="py-32 bg-white overflow-hidden">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="text-center mb-20 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Community</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">Reader Voices</h2>
+        </div>
+        <div class="relative">
+            <div class="overflow-hidden rounded-[32px]">
+                <div class="test-track flex" id="testTrack">
+                    <div class="min-w-full px-4 md:px-16"><div class="bg-gradient-to-br from-cream-100/50 to-champagne-50/30 rounded-[32px] p-12 md:p-16 text-center border border-cream-300/20">
+                        <div class="font-serif text-5xl text-champagne-300/40 mb-8 font-light">&ldquo;</div>
+                        <p class="font-serif text-xl md:text-[1.6rem] leading-[1.6] text-charcoal-700/60 mb-10 max-w-2xl mx-auto italic font-light">Soloda completely transformed my skincare routine. The ingredient breakdowns helped me finally understand what works for my skin type.</p>
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-rose-200 to-champagne-200 flex items-center justify-center text-white text-sm font-medium">S</div>
+                            <div class="text-left"><div class="text-sm font-medium">Sarah M.</div><div class="text-[11px] text-charcoal-700/30 font-light">Skincare Enthusiast</div></div>
+                        </div>
+                    </div></div>
+                    <div class="min-w-full px-4 md:px-16"><div class="bg-gradient-to-br from-cream-100/50 to-champagne-50/30 rounded-[32px] p-12 md:p-16 text-center border border-cream-300/20">
+                        <div class="font-serif text-5xl text-champagne-300/40 mb-8 font-light">&ldquo;</div>
+                        <p class="font-serif text-xl md:text-[1.6rem] leading-[1.6] text-charcoal-700/60 mb-10 max-w-2xl mx-auto italic font-light">Every recommendation feels personal and well-researched. It's like having a beauty-savvy best friend who actually knows the science.</p>
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-champagne-200 to-rose-200 flex items-center justify-center text-white text-sm font-medium">A</div>
+                            <div class="text-left"><div class="text-sm font-medium">Amara J.</div><div class="text-[11px] text-charcoal-700/30 font-light">Makeup Artist</div></div>
+                        </div>
+                    </div></div>
+                    <div class="min-w-full px-4 md:px-16"><div class="bg-gradient-to-br from-cream-100/50 to-champagne-50/30 rounded-[32px] p-12 md:p-16 text-center border border-cream-300/20">
+                        <div class="font-serif text-5xl text-champagne-300/40 mb-8 font-light">&ldquo;</div>
+                        <p class="font-serif text-xl md:text-[1.6rem] leading-[1.6] text-charcoal-700/60 mb-10 max-w-2xl mx-auto italic font-light">The self-care rituals section changed my evenings. I sleep better, my skin is clearer, and I finally have a routine I truly enjoy.</p>
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-rose-300 to-champagne-300 flex items-center justify-center text-white text-sm font-medium">L</div>
+                            <div class="text-left"><div class="text-sm font-medium">Luna K.</div><div class="text-[11px] text-charcoal-700/30 font-light">Wellness Coach</div></div>
+                        </div>
+                    </div></div>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-10 items-center">
+                <button class="tp w-9 h-9 rounded-full border border-cream-300/40 flex items-center justify-center hover:bg-charcoal-800 hover:border-charcoal-800 hover:text-white text-charcoal-700/30 transition-all duration-400 cursor-pointer"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                <div class="flex items-center gap-2" id="testDots">
+                    <button class="w-2 h-2 rounded-full bg-charcoal-800 transition-all cursor-pointer"></button>
+                    <button class="w-1.5 h-1.5 rounded-full bg-champagne-200 transition-all cursor-pointer"></button>
+                    <button class="w-1.5 h-1.5 rounded-full bg-champagne-200 transition-all cursor-pointer"></button>
+                </div>
+                <button class="tn w-9 h-9 rounded-full border border-cream-300/40 flex items-center justify-center hover:bg-charcoal-800 hover:border-charcoal-800 hover:text-white text-charcoal-700/30 transition-all duration-400 cursor-pointer"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════ SUBSCRIBE ════════════════ -->
+<section id="subscribe" class="py-28 bg-charcoal-800 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-8 left-8 w-44 h-44 rounded-full border border-champagne-400/30 gf"></div>
+        <div class="absolute bottom-8 right-8 w-64 h-64 rounded-full border border-rose-300/20 gf-d"></div>
+    </div>
+    <div class="max-w-xl mx-auto px-8 relative z-10 rv">
+        <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-200/50">Newsletter</span>
+        <h2 class="font-serif text-[2.4rem] lg:text-[3rem] font-light text-cream-100 mt-3 mb-4 tracking-[-0.01em]">Join the Soloda Letter</h2>
+        <p class="text-[14px] text-cream-200/30 mb-10 font-light leading-[1.8]">Weekly beauty wisdom, curated product reviews, and exclusive rituals — delivered with care.</p>
+        <form id="nlForm" class="flex flex-col sm:flex-row max-w-md mx-auto rounded-full overflow-hidden bg-white/[0.06] border border-white/[0.08] backdrop-blur-sm">
+            <input type="email" placeholder="Your email" required class="flex-1 px-6 py-4 bg-transparent text-cream-100 text-[13px] outline-none placeholder:text-cream-200/20 font-sans font-light sm:text-left text-center">
+            <button type="submit" class="mag-btn px-7 py-4 bg-cream-100 text-charcoal-800 text-[10px] font-medium tracking-[2px] uppercase border-none cursor-pointer transition-all hover:bg-white font-sans sm:rounded-none rounded-b-2xl sm:rounded-b-none">Subscribe</button>
         </form>
     </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery">
-    <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-label">Visual Inspiration</p>
-            <h2 class="section-title">Beauty Gallery</h2>
-            <p class="section-subtitle">A curated collection of beauty moments, products, and inspiration.</p>
-            <div class="divider"></div>
+<!-- ════════════════ GALLERY ════════════════ -->
+<section id="gallery" class="py-32 bg-cream-50">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="text-center mb-20 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Inspiration</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">Visual Diary</h2>
         </div>
-        <div class="gallery-grid fade-up">
-            <div class="gallery-item">
-                <div class="gallery-item-bg">&#127804;</div>
-                <div class="gallery-overlay"><p>Floral Skincare Flatlay</p></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[240px]">
+            <div class="gal-item md:col-span-2 md:row-span-2 rounded-3xl overflow-hidden relative cursor-pointer group" onclick="openLB(this)">
+                <div class="w-full h-full bg-gradient-to-br from-rose-100/50 to-champagne-100/50 flex items-center justify-center text-6xl group-hover:scale-[1.03] transition-transform duration-[1.5s]">&#127804;</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal-800/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 flex items-end p-7"><p class="text-cream-100 text-sm font-light tracking-wide">Floral Skincare Flatlay</p></div>
             </div>
-            <div class="gallery-item">
-                <div class="gallery-item-bg">&#128139;</div>
-                <div class="gallery-overlay"><p>Bold Lip Collection</p></div>
+            <div class="gal-item rounded-3xl overflow-hidden relative cursor-pointer group" onclick="openLB(this)">
+                <div class="w-full h-full bg-gradient-to-br from-champagne-100/50 to-rose-100/50 flex items-center justify-center text-4xl group-hover:scale-[1.03] transition-transform duration-[1.5s]">&#128139;</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal-800/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 flex items-end p-5"><p class="text-cream-100 text-sm font-light tracking-wide">Bold Lip Collection</p></div>
             </div>
-            <div class="gallery-item">
-                <div class="gallery-item-bg">&#129473;</div>
-                <div class="gallery-overlay"><p>Morning Routine</p></div>
+            <div class="gal-item rounded-3xl overflow-hidden relative cursor-pointer group" onclick="openLB(this)">
+                <div class="w-full h-full bg-gradient-to-br from-emerald-50/50 to-champagne-100/50 flex items-center justify-center text-4xl group-hover:scale-[1.03] transition-transform duration-[1.5s]">&#129473;</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal-800/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 flex items-end p-5"><p class="text-cream-100 text-sm font-light tracking-wide">Morning Routine</p></div>
             </div>
-            <div class="gallery-item">
-                <div class="gallery-item-bg">&#127800;</div>
-                <div class="gallery-overlay"><p>Rose-Infused Serums</p></div>
+            <div class="gal-item rounded-3xl overflow-hidden relative cursor-pointer group" onclick="openLB(this)">
+                <div class="w-full h-full bg-gradient-to-br from-violet-50/50 to-rose-50/50 flex items-center justify-center text-4xl group-hover:scale-[1.03] transition-transform duration-[1.5s]">&#127800;</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal-800/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 flex items-end p-5"><p class="text-cream-100 text-sm font-light tracking-wide">Rose-Infused Serums</p></div>
             </div>
-            <div class="gallery-item">
-                <div class="gallery-item-bg">&#127812;</div>
-                <div class="gallery-overlay"><p>Natural Ingredients</p></div>
+            <div class="gal-item rounded-3xl overflow-hidden relative cursor-pointer group" onclick="openLB(this)">
+                <div class="w-full h-full bg-gradient-to-br from-champagne-100/50 to-emerald-50/30 flex items-center justify-center text-4xl group-hover:scale-[1.03] transition-transform duration-[1.5s]">&#127812;</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal-800/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 flex items-end p-5"><p class="text-cream-100 text-sm font-light tracking-wide">Natural Ingredients</p></div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-    <div class="container">
-        <div class="section-header fade-up">
-            <p class="section-label">Get in Touch</p>
-            <h2 class="section-title">Let's Connect</h2>
-            <p class="section-subtitle">Have a question, collaboration idea, or just want to say hello? We'd love to hear from you.</p>
-            <div class="divider"></div>
+<!-- Lightbox -->
+<div class="lightbox" id="lb" onclick="closeLB(event)">
+    <button class="absolute top-8 right-8 text-cream-100/40 hover:text-cream-100 text-2xl cursor-pointer z-10 bg-transparent border-none transition-colors" onclick="closeLB(event)">&times;</button>
+    <div class="w-[75vw] max-w-xl aspect-square rounded-[32px] overflow-hidden" id="lbContent"></div>
+</div>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<section id="contact" class="py-32 bg-white">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="text-center mb-20 rv">
+            <span class="text-[10px] font-medium tracking-[3px] uppercase text-champagne-500/60">Connect</span>
+            <h2 class="font-serif text-[2.8rem] lg:text-[3.4rem] font-light mt-3 tracking-[-0.01em]">Get in Touch</h2>
         </div>
-        <div class="contact-grid">
-            <div class="contact-info fade-up">
-                <h3>Reach Out Anytime</h3>
-                <p>Whether it's a product recommendation request, a partnership proposal, or feedback on our content — your message matters to us.</p>
-                <div class="contact-detail">
-                    <div class="cd-icon">&#9993;</div>
-                    <div><h4>Email</h4><p>hello@glowandgrace.com</p></div>
-                </div>
-                <div class="contact-detail">
-                    <div class="cd-icon">&#128205;</div>
-                    <div><h4>Location</h4><p>Los Angeles, California</p></div>
-                </div>
-                <div class="contact-detail">
-                    <div class="cd-icon">&#128340;</div>
-                    <div><h4>Working Hours</h4><p>Mon — Fri, 9am — 5pm PST</p></div>
+        <div class="grid lg:grid-cols-2 gap-20">
+            <div class="rv-l">
+                <h3 class="font-serif text-2xl font-light mb-5">We'd Love to Hear From You</h3>
+                <p class="text-[14px] text-charcoal-700/35 leading-[1.9] mb-10 font-light">Whether it's a collaboration idea, product recommendation, or simply a hello — your message matters to us.</p>
+                <div class="space-y-7">
+                    <div class="flex gap-4 items-start">
+                        <div class="w-11 h-11 rounded-full bg-cream-100 flex items-center justify-center flex-shrink-0 text-base">&#9993;</div>
+                        <div><h4 class="font-serif font-medium text-[15px] mb-1">Email</h4><p class="text-[13px] text-charcoal-700/35 font-light">hello@soloda.com</p></div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="w-11 h-11 rounded-full bg-cream-100 flex items-center justify-center flex-shrink-0 text-base">&#128205;</div>
+                        <div><h4 class="font-serif font-medium text-[15px] mb-1">Location</h4><p class="text-[13px] text-charcoal-700/35 font-light">Los Angeles, California</p></div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="w-11 h-11 rounded-full bg-cream-100 flex items-center justify-center flex-shrink-0 text-base">&#128340;</div>
+                        <div><h4 class="font-serif font-medium text-[15px] mb-1">Hours</h4><p class="text-[13px] text-charcoal-700/35 font-light">Mon — Fri, 9am — 5pm PST</p></div>
+                    </div>
                 </div>
             </div>
-            <form class="contact-form fade-up" onsubmit="event.preventDefault(); alert('Message sent! We\'ll get back to you soon.');">
-                <div class="form-row">
-                    <input type="text" placeholder="Your Name" required>
-                    <input type="email" placeholder="Your Email" required>
+            <form id="contactForm" class="space-y-5 rv-r">
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <input type="text" placeholder="Name" required class="w-full px-5 py-4 rounded-2xl border border-cream-300/30 bg-cream-50/50 text-[13px] text-charcoal-800 outline-none focus:border-champagne-400/40 focus:ring-1 focus:ring-champagne-400/10 transition-all font-sans font-light placeholder:text-charcoal-700/20">
+                    <input type="email" placeholder="Email" required class="w-full px-5 py-4 rounded-2xl border border-cream-300/30 bg-cream-50/50 text-[13px] text-charcoal-800 outline-none focus:border-champagne-400/40 focus:ring-1 focus:ring-champagne-400/10 transition-all font-sans font-light placeholder:text-charcoal-700/20">
                 </div>
-                <input type="text" placeholder="Subject">
-                <textarea placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn" style="align-self:flex-start;">Send Message</button>
+                <input type="text" placeholder="Subject" class="w-full px-5 py-4 rounded-2xl border border-cream-300/30 bg-cream-50/50 text-[13px] text-charcoal-800 outline-none focus:border-champagne-400/40 focus:ring-1 focus:ring-champagne-400/10 transition-all font-sans font-light placeholder:text-charcoal-700/20">
+                <textarea placeholder="Message" required class="w-full px-5 py-4 rounded-2xl border border-cream-300/30 bg-cream-50/50 text-[13px] text-charcoal-800 outline-none focus:border-champagne-400/40 focus:ring-1 focus:ring-champagne-400/10 transition-all font-sans font-light resize-y min-h-[140px] placeholder:text-charcoal-700/20"></textarea>
+                <button type="submit" class="mag-btn inline-flex items-center gap-3 px-8 py-[14px] bg-charcoal-800 text-cream-100 text-[10.5px] font-medium tracking-[2px] uppercase rounded-full hover:bg-charcoal-900 transition-all duration-500 border-none cursor-pointer font-sans shadow-lg shadow-charcoal-800/8">
+                    Send Message
+                    <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </button>
             </form>
         </div>
     </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div class="logo">Glow <span>&</span> Grace</div>
-                <p>Celebrating beauty in all its forms — honest reviews, real advice, and self-care that fits your life.</p>
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="bg-charcoal-800 text-cream-200/25 pt-20 pb-10">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-14 mb-16">
+            <div>
+                <div class="font-serif text-[1.4rem] font-medium text-cream-100/80 tracking-[0.1em] mb-5">Soloda</div>
+                <p class="text-[13px] leading-[1.8] font-light">Celebrating beauty in all its forms — honest reviews, real advice, and rituals that fit your life.</p>
             </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#posts">Blog</a></li>
-                    <li><a href="#tips">Tips</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+            <div>
+                <h4 class="text-[10px] font-medium tracking-[2px] uppercase text-cream-100/30 mb-6 font-sans">Navigate</h4>
+                <ul class="space-y-3 text-[13px] font-light"><li><a href="#about" class="hover:text-champagne-200 transition-colors duration-400">About</a></li><li><a href="#journal" class="hover:text-champagne-200 transition-colors duration-400">Journal</a></li><li><a href="#rituals" class="hover:text-champagne-200 transition-colors duration-400">Rituals</a></li><li><a href="#contact" class="hover:text-champagne-200 transition-colors duration-400">Contact</a></li></ul>
             </div>
-            <div class="footer-col">
-                <h4>Topics</h4>
-                <ul>
-                    <li><a href="#">Skincare</a></li>
-                    <li><a href="#">Makeup</a></li>
-                    <li><a href="#">Wellness</a></li>
-                    <li><a href="#">Haircare</a></li>
-                </ul>
+            <div>
+                <h4 class="text-[10px] font-medium tracking-[2px] uppercase text-cream-100/30 mb-6 font-sans">Topics</h4>
+                <ul class="space-y-3 text-[13px] font-light"><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Skincare</a></li><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Makeup</a></li><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Wellness</a></li><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Haircare</a></li></ul>
             </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Use</a></li>
-                    <li><a href="#">Disclaimer</a></li>
-                </ul>
+            <div>
+                <h4 class="text-[10px] font-medium tracking-[2px] uppercase text-cream-100/30 mb-6 font-sans">Legal</h4>
+                <ul class="space-y-3 text-[13px] font-light"><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Privacy</a></li><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Terms</a></li><li><a href="#" class="hover:text-champagne-200 transition-colors duration-400">Disclaimer</a></li></ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Glow & Grace. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg></a>
-                <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-                <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+        <div class="border-t border-cream-100/[0.04] pt-8 flex flex-col sm:flex-row justify-between items-center gap-5 text-[12px] font-light">
+            <p>&copy; 2026 Soloda. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#" class="w-8 h-8 rounded-full bg-cream-100/[0.04] flex items-center justify-center hover:bg-champagne-500 transition-all duration-400" aria-label="Instagram"><svg class="w-3.5 h-3.5 fill-cream-100/30" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-cream-100/[0.04] flex items-center justify-center hover:bg-champagne-500 transition-all duration-400" aria-label="Pinterest"><svg class="w-3.5 h-3.5 fill-cream-100/30" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-cream-100/[0.04] flex items-center justify-center hover:bg-champagne-500 transition-all duration-400" aria-label="YouTube"><svg class="w-3.5 h-3.5 fill-cream-100/30" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-cream-100/[0.04] flex items-center justify-center hover:bg-champagne-500 transition-all duration-400" aria-label="TikTok"><svg class="w-3.5 h-3.5 fill-cream-100/30" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
             </div>
         </div>
     </div>
 </footer>
 
-<!-- BACK TO TOP -->
-<button class="back-top" id="backTop" aria-label="Back to top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+<!-- Back to top -->
+<button id="backTop" class="fixed bottom-8 right-8 w-11 h-11 rounded-full bg-charcoal-800 text-cream-100 flex items-center justify-center cursor-pointer opacity-0 invisible shadow-lg shadow-charcoal-800/15 hover:-translate-y-1 transition-all duration-500 z-50 border-none">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
 </button>
 
+<div class="toast" id="toast"></div>
+
+<!-- ════════════════ JAVASCRIPT ════════════════ -->
 <script>
-    // Navbar scroll effect
-    const nav = document.getElementById('navbar');
+document.addEventListener('DOMContentLoaded', () => {
+    // Scroll progress
+    const sp = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 50);
+        const h = document.documentElement;
+        sp.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+    });
+
+    // Cursor glow
+    const glow = document.getElementById('cursor-glow');
+    let mx=0,my=0,gx=0,gy=0;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+    (function ag(){ gx+=(mx-gx)*0.06; gy+=(my-gy)*0.06; glow.style.left=gx+'px'; glow.style.top=gy+'px'; requestAnimationFrame(ag); })();
+
+    // Particles — very subtle
+    const cvs = document.getElementById('particles'), ctx = cvs.getContext('2d');
+    let pts = [];
+    function rc(){ cvs.width=innerWidth; cvs.height=innerHeight; }
+    rc(); addEventListener('resize', rc);
+    for(let i=0;i<20;i++) pts.push({x:Math.random()*cvs.width,y:Math.random()*cvs.height,s:Math.random()*1.5+0.3,sx:(Math.random()-0.5)*0.15,sy:(Math.random()-0.5)*0.15,o:Math.random()*0.15+0.03});
+    (function ap(){ ctx.clearRect(0,0,cvs.width,cvs.height); pts.forEach(p=>{ p.x+=p.sx; p.y+=p.sy; if(p.x<0)p.x=cvs.width; if(p.x>cvs.width)p.x=0; if(p.y<0)p.y=cvs.height; if(p.y>cvs.height)p.y=0; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fillStyle=`rgba(194,165,109,${p.o})`; ctx.fill(); }); requestAnimationFrame(ap); })();
+
+    // Navbar scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { nav.classList.toggle('shadow-sm', scrollY>60); });
+
+    // Active nav
+    const secs = document.querySelectorAll('section[id]'), nvl = document.querySelectorAll('.nv-link');
+    window.addEventListener('scroll', () => {
+        let c=''; secs.forEach(s => { if(scrollY>=s.offsetTop-250) c=s.id; });
+        nvl.forEach(l => { l.classList.toggle('active', l.getAttribute('href')==='#'+c); l.classList.toggle('text-champagne-500', l.getAttribute('href')==='#'+c); });
     });
 
     // Mobile menu
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-    });
-    navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-        });
-    });
+    const hb=document.getElementById('hamburger'), mm=document.getElementById('mobileMenu'), sp2=hb.querySelectorAll('span');
+    hb.addEventListener('click', ()=>{ mm.classList.toggle('hidden'); sp2[0].classList.toggle('translate-y-[7px]'); sp2[0].classList.toggle('rotate-45'); sp2[1].classList.toggle('opacity-0'); sp2[2].classList.toggle('-translate-y-[7px]'); sp2[2].classList.toggle('-rotate-45'); });
+    document.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>{ mm.classList.add('hidden'); sp2[0].classList.remove('translate-y-[7px]','rotate-45'); sp2[1].classList.remove('opacity-0'); sp2[2].classList.remove('-translate-y-[7px]','-rotate-45'); }));
 
     // Back to top
-    const backTop = document.getElementById('backTop');
-    window.addEventListener('scroll', () => {
-        backTop.classList.toggle('visible', window.scrollY > 500);
-    });
-    backTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smoothhh' });
+    const bt=document.getElementById('backTop');
+    window.addEventListener('scroll', ()=>{ bt.classList.toggle('opacity-100',scrollY>600); bt.classList.toggle('visible',scrollY>600); bt.classList.toggle('invisible',scrollY<=600); bt.classList.toggle('opacity-0',scrollY<=600); });
+    bt.addEventListener('click', ()=>scrollTo({top:0,behavior:'smooth'}));
+
+    // GSAP
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.rv').forEach(el => gsap.fromTo(el,{y:32,opacity:0},{y:0,opacity:1,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+    gsap.utils.toArray('.rv-l').forEach(el => gsap.fromTo(el,{x:-32,opacity:0},{x:0,opacity:1,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+    gsap.utils.toArray('.rv-r').forEach(el => gsap.fromTo(el,{x:32,opacity:0},{x:0,opacity:1,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+    gsap.utils.toArray('.stg').forEach(p => gsap.fromTo(p.children,{y:24,opacity:0},{y:0,opacity:1,duration:0.7,stagger:0.15,ease:'power2.out',scrollTrigger:{trigger:p,start:'top 82%'}}));
+
+    // Counters
+    document.querySelectorAll('.counter-val').forEach(c => {
+        const t=+c.dataset.target;
+        ScrollTrigger.create({ trigger:c, start:'top 92%', onEnter:()=>{ gsap.to({v:0},{v:t,duration:2.5,ease:'power2.out',onUpdate:function(){c.textContent=Math.round(this.targets()[0].v)}}); },once:true });
     });
 
-    // Scroll animations
-    const fadeEls = document.querySelectorAll('.fade-up');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('visible'), i * 80);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.15 });
-    fadeEls.forEach(el => observer.observe(el));
+    // Typed effect
+    const phrases=['Natural Glow','Inner Radiance','True Beauty','Best Self'];
+    let pi=0,ci=0,del=false;
+    const te=document.getElementById('typed-target');
+    function typ(){ const w=phrases[pi]; te.textContent=w.substring(0,ci); if(!del){ci++;if(ci>w.length){del=true;setTimeout(typ,2200);return;}}else{ci--;if(ci===0){del=false;pi=(pi+1)%phrases.length;}} setTimeout(typ,del?40:90); }
+    setTimeout(typ,3000);
+
+    // Tilt
+    document.querySelectorAll('.tilt-el').forEach(c=>{
+        c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-0.5;const y=(e.clientY-r.top)/r.height-0.5;c.style.transform=`perspective(800px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-6px)`;});
+        c.addEventListener('mouseleave',()=>{c.style.transform='';});
+    });
+
+    // Magnetic buttons
+    document.querySelectorAll('.mag-btn').forEach(b=>{ b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();b.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');b.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');}); });
+
+    // Filter tabs
+    const tabs=document.querySelectorAll('.tab-btn'),posts=document.querySelectorAll('.post-card');
+    tabs.forEach(t=>t.addEventListener('click',()=>{
+        tabs.forEach(x=>{x.classList.remove('active','bg-charcoal-800','text-cream-100');x.classList.add('text-charcoal-700/35');});
+        t.classList.add('active','bg-charcoal-800','text-cream-100');t.classList.remove('text-charcoal-700/35');
+        const f=t.dataset.filter;
+        posts.forEach(p=>{ if(f==='all'||p.dataset.category===f){gsap.to(p,{opacity:1,scale:1,duration:0.5,display:'block'});}else{gsap.to(p,{opacity:0,scale:0.97,duration:0.4,onComplete:()=>p.style.display='none'});} });
+    }));
+
+    // Like buttons
+    document.querySelectorAll('.like-btn').forEach(b=>b.addEventListener('click',e=>{
+        e.preventDefault();e.stopPropagation();
+        const svg=b.querySelector('svg');
+        if(svg.getAttribute('fill')==='none'){svg.setAttribute('fill','currentColor');showToast('Saved to favorites');}
+        else{svg.setAttribute('fill','none');showToast('Removed from favorites');}
+        gsap.fromTo(b,{scale:0.7},{scale:1,duration:0.5,ease:'elastic.out(1,0.4)'});
+    }));
+
+    // Accordion
+    document.querySelectorAll('.acc-btn').forEach(b=>b.addEventListener('click',()=>{
+        const item=b.parentElement,content=item.querySelector('.acc-content'),icon=b.querySelector('.acc-icon');
+        const isOpen=content.style.maxHeight&&content.style.maxHeight!=='0px';
+        document.querySelectorAll('.acc-content').forEach(c=>c.style.maxHeight='0px');
+        document.querySelectorAll('.acc-icon').forEach(i=>i.style.transform='rotate(0deg)');
+        if(!isOpen){content.style.maxHeight=content.scrollHeight+'px';icon.style.transform='rotate(180deg)';}
+    }));
+
+    // Testimonial carousel
+    let ti=0; const track=document.getElementById('testTrack'),dots=document.getElementById('testDots').children,ts=3;
+    function goS(i){ ti=((i%ts)+ts)%ts; track.style.transform=`translateX(-${ti*100}%)`; Array.from(dots).forEach((d,j)=>{d.className=j===ti?'w-2 h-2 rounded-full bg-charcoal-800 transition-all cursor-pointer':'w-1.5 h-1.5 rounded-full bg-champagne-200 transition-all cursor-pointer';}); }
+    document.querySelector('.tn').addEventListener('click',()=>goS(ti+1));
+    document.querySelector('.tp').addEventListener('click',()=>goS(ti-1));
+    Array.from(dots).forEach((d,i)=>d.addEventListener('click',()=>goS(i)));
+    setInterval(()=>goS(ti+1),6000);
+
+    // Newsletter
+    document.getElementById('nlForm').addEventListener('submit',e=>{e.preventDefault();const b=e.target.querySelector('button');b.textContent='Welcome!';e.target.querySelector('input').value='';showToast('Welcome to the Soloda family');setTimeout(()=>b.textContent='Subscribe',3000);});
+
+    // Contact
+    document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();showToast('Message sent — we\'ll be in touch');e.target.reset();});
+
+    // Dark mode
+    const dt=document.getElementById('darkToggle'),dd=document.getElementById('toggleDot'),bd=document.getElementById('body');
+    let dk=false;
+    dt.addEventListener('click',()=>{
+        dk=!dk;
+        if(dk){bd.classList.add('!bg-charcoal-900','!text-cream-200/70');dd.style.left='22px';dd.innerHTML='&#9790;';dt.classList.add('!bg-charcoal-700');document.querySelectorAll('section').forEach(s=>s.classList.add('!bg-charcoal-900'));nav.classList.add('!bg-charcoal-900/90');showToast('Dark mode');}
+        else{bd.classList.remove('!bg-charcoal-900','!text-cream-200/70');dd.style.left='3px';dd.innerHTML='&#9728;';dt.classList.remove('!bg-charcoal-700');document.querySelectorAll('section').forEach(s=>s.classList.remove('!bg-charcoal-900'));nav.classList.remove('!bg-charcoal-900/90');showToast('Light mode');}
+    });
+
+    // Toast
+    function showToast(m){const t=document.getElementById('toast');t.innerHTML=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    window.showToast=showToast;
+
+    // Lightbox
+    window.openLB=function(item){const bg=item.querySelector('div');const lb=document.getElementById('lb'),cnt=document.getElementById('lbContent');cnt.innerHTML='';const cl=bg.cloneNode(true);cl.style.transform='none';cnt.appendChild(cl);lb.classList.add('active');gsap.fromTo(cnt,{scale:0.85,opacity:0},{scale:1,opacity:1,duration:0.5,ease:'power2.out'});};
+    window.closeLB=function(e){if(e.target===document.getElementById('lb')||e.target.tagName==='BUTTON'){const lb=document.getElementById('lb');gsap.to(document.getElementById('lbContent'),{scale:0.85,opacity:0,duration:0.3,onComplete:()=>lb.classList.remove('active')});}};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lb').classList.remove('active');});
+});
 </script>
 </body>
 </html>
